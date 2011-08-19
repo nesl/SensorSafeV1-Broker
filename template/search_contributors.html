@@ -1,0 +1,403 @@
+{% extends "base.html" %}
+
+{% block head %}
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<style type="text/css">
+html { height: 100% }
+#body { height: 100%; margin: 0px; padding: 0px }
+#map_canvas { height: 100%; width: 100% }
+div.dialog { font-size: 17px; }
+</style>
+<link href="/files/css/custom-theme/jquery-ui-1.8.8.custom.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="/files/js/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="/files/js/jquery-ui-1.8.8.custom.min.js"></script>
+
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<!--<script type="text/javascript" src="/files/js/highcharts.js"></script>-->
+<!--<script type="text/javascript" src="/files/js/themes/gray.js"></script>-->
+
+<script type="text/javascript" src="/files/js/json2-min.js"></script>
+<script type="text/javascript" src="/files/js/date-en-US.js"></script>
+<script type="text/javascript" src="/files/js/date.format.js"></script>
+<script type="text/javascript">
+var contributors
+
+$(document).ready(function() 
+{
+	$.post( 'http://fieldstream.nesl.ucla.edu/broker/get_contributors',
+		{ 'apikey': '{{apikey}}' },
+		function (data, textStatus, XMLHttpRequest) {
+			contributors = JSON.parse(data)
+			update_data_channel()
+		}
+	);
+
+	$('#add_new_location').dialog({
+		autoOpen: false,
+		modal: true,
+		title: 'Define a New Location',
+		width: 650,
+	});
+
+	var datepickerOptions = {
+	numberOfMonths: 1,
+									showButtonPanel: true,
+									changeMonth: true,
+									changeYear: true,
+									showOtherMonths: true,
+									selectOtherMonths: true
+	};
+	$("#startdate").datepicker(datepickerOptions);
+	$("#enddate").datepicker(datepickerOptions);
+	$("#repeat_enddate").datepicker(datepickerOptions);
+
+	init_time_ui(); 
+});
+
+function update_data_channel() {
+	for (var i in contributors) {
+		get_data_channels(contributors[i][0], contributors[i][1])
+	}		
+}
+
+var cur_data_channels = []
+function get_data_channels(contributor_name, contributor_address)
+{
+	// get list of data_channels
+	var message = { 'distinct': 'data_channel' };
+	console.log('Sending query')
+	console.log(message);
+	$.post( 'http://' + contributor_address + '/query/',
+		{ 'apikey': '{{apikey}}', 'contributor': contributor_name, 'data': JSON.stringify(message) },
+		function (data, textStatus, XMLHttpRequest) {
+			// receive list of data_channels
+			data_channels = JSON.parse(data);
+			console.log('Received data');
+			console.log(data_channels);
+			if (data.length <= 0)
+				return
+
+			temp_str1 = $('#data_channel_list').html();
+			temp_str2 = $('#modify_data_channel_list').html();
+			for (var i in data_channels) {
+				if (cur_data_channels.indexOf(data_channels[i]) != -1)
+					continue
+				cur_data_channels.push(data_channels[i])
+				temp_str1 += '<label><input type="checkbox" value="' + data_channels[i] + '">'
+					+ data_channels[i] + '</label><br/>';
+				temp_str2 += '<tr><td width=20></td><td><label><input type="checkbox" value="' + data_channels[i] + '">'
+					+ data_channels[i] + '</label></td><td><input type="text" size=10 id="' 
+					+ data_channels[i] + '_rate">Hz</td></tr>';
+			}
+			$('#data_channel_list').html(temp_str1);
+			$('#modify_data_channel_list').html(temp_str2);
+
+
+
+			/*$('#data_channel').html('');
+			for ( var i in data_channels )
+			{
+				if (cur_data_channels.indexOf(data_channels[i]) != -1)
+					continue
+				cur_data_channels.push(data_channels[i])
+				old = $('#data_channel_list').html();
+				$('#data_channel_list').html(old+'<label><input type="checkbox" value="' + data_channels[i] + '"/>' + data_channels[i] + '</label><br/>');
+			}*/
+		}
+	);
+}
+
+function set_time_range(d1, d2) {
+	startdate = d1.format('mm/dd/yyyy');
+	starttime = d1.format('hh:MMtt');
+	enddate = d2.format('mm/dd/yyyy');
+	endtime = d2.format('hh:MMtt');
+	$('#startdate').val(startdate);
+	$('#starttime').val(starttime);
+	$('#enddate').val(enddate);
+	$('#endtime').val(endtime);
+}
+
+function init_time_ui() {
+	var d1 = new Date();
+	var d2 = new Date();
+	d1.set( { minute: 0 } );
+	d2.set( { minute: 0 } );
+	d2.addHours(1);
+	set_time_range(d1, d2);
+
+	$('#repeat_starttime').val(d1.format('hh:MMtt'));
+	$('#repeat_endtime').val(d2.format('hh:MMtt'));
+
+	weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+	$('#days :checkbox').each( function () {
+			if ( weekdays.indexOf($(this).val()) != -1 ) {
+			$(this).attr('checked', 'checked');
+			}
+			});
+}
+
+function search()
+{
+  var cond = {};
+
+	// get checked location labels
+	var checked_location_labels = [];
+	if ( $('#all_location_checkbox').attr('checked') == false ) {
+		$('#location_list :checked').each(function() {
+				checked_location_labels.push($(this).val());
+				});
+
+		if (checked_location_labels.length > 0) {
+			cond['location_label'] = checked_location_labels;
+		}
+	} 
+	else {
+		cond['location_label'] = 'all'
+	}
+
+	// get time...
+	if ( $('#all_time').attr('checked') == false ) {
+		if ($('#timerange').attr('checked') == true) {
+			console.log($('#startdate').val() + ' ' + $('#starttime').val());
+			d1 = Date.parse($('#startdate').val() + ' ' + $('#starttime').val());
+			d2 = Date.parse($('#enddate').val() + ' ' + $('#endtime').val());
+			console.log(d1);
+			console.log(d2);
+			mintime = d1.getTime()/1000.0;
+			maxtime = d2.getTime()/1000.0;
+			//if ($('#repeat').attr('checked') == false) {
+				cond['timestamp'] = {}
+				cond['timestamp']['timerange'] = { '$gte': mintime, '$lte': maxtime };
+			//}
+		} 
+		/*	
+		if ($('#repeat').attr('checked') == true) {
+			cond['timestamp'] = {}
+			if ($('#timerange').attr('checked') == true) {
+				cond['timestamp']['repeat_time'] = { 'time_range': [ mintime, maxtime ] };
+			} else {
+				cond['timestamp']['repeat_time'] = {}
+			}
+			if ( $('#allday').attr('checked') == false ) {
+				cond['timestamp']['repeat_time']['hour_min'] = [ $('#repeat_starttime').val(), $('#repeat_endtime').val() ];
+			}
+			cond['timestamp']['repeat_time']['day'] = [];
+			$('#days :checked').each(function () {
+					cond['timestamp']['repeat_time']['day'].push($(this).val());
+					});
+			if ( cond['timestamp']['repeat_time']['day'].length <= 0 ) {
+				alert('Please select repeat days.');
+				return
+			}
+		}*/
+	} else {
+		cond['timestamp'] = 'all'
+	}
+
+	// get checked data channels
+	var checked_data_channels = [];
+	if ( $('#all_data_channels').attr('checked') == false ) {
+		$('#data_channel_list :checked').each(function() {
+				checked_data_channels.push($(this).val());
+				});
+
+		if (checked_data_channels.length > 0) {
+			cond['data_channel'] = [] ;
+			for (var i in checked_data_channels) {
+				cond['data_channel'].push(checked_data_channels[i]);
+			}
+		}
+	} else {
+		cond['data_channel'] = 'all'
+	}
+
+	// get modification options
+	$('#location_resolution :checked').each( function() {
+		locres = $(this).val()
+		if ( locres != "dontcare" )
+			cond['location_resolution'] = locres;
+	});
+
+	$('#timestamp_resolution :checked').each( function() {
+		timestamp_resolution = $(this).val()
+		if ( timestamp_resolution != "dontcare" )
+			cond['timestamp_resolution'] = timestamp_resolution
+	});
+	
+	sample_rate_rules = [];   
+	$('#modify_data_channel_list :checked').each( function() {
+		channel = $(this).val() 
+		rate = parseInt($('#' + channel.replace('\.', '\\\.') + '_rate').val())
+		if (isNaN(rate)) {
+			alert('Please enter sample rates.')
+			return;
+		} 
+		sample_rate_rules.push([ channel, rate ])
+	});
+	if (sample_rate_rules.length > 0)
+		cond['sample_rate'] = sample_rate_rules  
+
+	console.log("Search condition")
+	console.log(cond)
+
+	// get remote data store address
+	addresses = []
+	for (var i in contributors) {
+		if (addresses.indexOf(contributors[i][1]) == -1)
+			addresses.push(contributors[i][1])
+	}
+
+	// send search requests to datastores
+	for (var i in addresses) 
+	{
+		$.post( 'http://' + addresses[i] + '/search_rules/',
+			{ 'apikey': '{{apikey}}', 'query': JSON.stringify(cond) },
+			function (data, textStatus, XMLHttpRequest) {
+				console.log(data)
+			}
+		);
+	}
+}
+
+function all_location_checkbox() {
+	if ($('#all_location_checkbox').attr('checked') == true) {
+		$('#location_list').hide();
+	} else {
+		$('#location_list').show();
+	}
+}
+
+function all_data_channels() {
+	if ($('#all_data_channels').attr('checked') == true) {
+		$('#data_channel_list').hide();
+	} else {
+		$('#data_channel_list').show();
+	}
+}
+
+function all_day_checkbox() {
+	if ($('#allday').attr('checked') == true) {
+		$('#repeat_time').hide();
+	} else {
+		$('#repeat_time').show();
+	}
+}
+
+function all_time_checkbox() {
+	if ($('#all_time').attr('checked') == true) {
+		$('#time_condition').hide();
+	} else {
+		$('#time_condition').show();
+	}
+}
+
+
+</script>
+{% endblock %}
+
+{% block content %}
+
+<b>Location</b> <button onClick='new_location()'>Define New Location...</button>
+<table cellspacing=0 cellpadding=0>
+<tr>
+<td width=20></td>
+<td><label><input type="checkbox" id='all_location_checkbox' onClick="all_location_checkbox()">All locations</label>
+<div id='location_list'>
+<label><input type="checkbox" value='home'>Home</label><br/>
+<label><input type="checkbox" value='work'>Work</label>
+</div></td>
+</tr>
+</table>
+
+<br/>
+
+<b>Time</b>
+<table cellspacing=0 cellpadding=0>
+<tr>
+<td width=20></td>
+<td><label><input type="checkbox" id='all_time' onClick="all_time_checkbox()">All time</label></td>
+</tr>
+</table>
+<table cellspacing=0 cellpadding=0 id='time_condition'>
+<tr>
+<td width=20></td>
+<td width=120>
+<label><input type='checkbox' id='timerange'>Time range:</label>
+</td>
+<td width=480>
+<input type="text" size=10 id="startdate"><input type="text" size=10 id="starttime"> to <input type="text" size=10 id="endtime"><input type="text" size=10 id="enddate"><br/>
+</td>
+</tr>
+<!--<tr><td>&nbsp;</td></tr>
+<tr>
+<td width=20></td>
+<td width=110>
+<label><input type="checkbox" id="repeat">Repeat:</label>
+</td>
+<td width=490>
+<div id='days'>
+<label><input type="checkbox" id="Sun" value='Sun'>Sun</label>
+<label><input type="checkbox" id="Mon" value='Mon'>Mon</label>
+<label><input type="checkbox" id="Tue" value='Tue'>Tue</label>
+<label><input type="checkbox" id="Wed" value='Wed'>Wed</label>
+<label><input type="checkbox" id="Thu" value='Thu'>Thu</label>
+<label><input type="checkbox" id="Fri" value='Fri'>Fri</label>
+<label><input type="checkbox" id='Sat' value='Sat'>Sat</label>
+</div>
+
+<label><input type="checkbox" id="allday" onClick="all_day_checkbox()">All Day</label>
+&nbsp;&nbsp;&nbsp;<font id='repeat_time'>
+From <input type="text" size=10 id='repeat_starttime'>
+to <input type="text" size=10 id='repeat_endtime'>
+</font>
+</td>
+</tr>-->
+</table>
+
+<br/>
+<b>Data Channels</b>
+<table cellspacing=0 cellpadding=0>
+<tr>
+<td width=20></td>
+<td><label><input type="checkbox" id='all_data_channels' onClick='all_data_channels()'>All data channels</label>
+<div id="data_channel_list"></div>
+</td></tr>
+</table>
+
+<br/>
+<b>Location Resolution</b>
+<div id='location_resolution'>
+<table><tr><td width=20></td><td>
+<label><input type='radio' name='location_resolution' value='dontcare' checked>Don't care</label>
+<label><input type='radio' id='location_resolution_latlng' name='location_resolution' value='dontmodify'>Don't modify</label>
+<label><input type='radio' name='location_resolution' value='street'>Street Address</label>
+<label><input type='radio' name='location_resolution' value='zipcode'>Zipcode</label>
+<label><input type='radio' name='location_resolution' value='city'>City</label>
+<label><input type='radio' name='location_resolution' value='state'>States</label>
+<label><input type='radio' name='location_resolution' value='country'>Country</label>
+</td></tr></table>
+</div>
+
+<br/>
+<b>Timestamp Resolution</b>
+<table><tr><td width=20></td><td>
+<div id='timestamp_resolution'>
+<label><input type='radio' name='timestamp_resolution' value='dontcare' checked>Don't care</label>
+<label><input type='radio' id='timestamp_resolution_original' name='timestamp_resolution' value='dontmodify'>Don't modify</label>
+<label><input type='radio' name='timestamp_resolution' value='hour'>Hour</label>
+<label><input type='radio' name='timestamp_resolution' value='day'>Day</label>
+<label><input type='radio' name='timestamp_resolution' value='month'>Month</label>
+<label><input type='radio' name='timestamp_resolution' value='year'>Year</label>
+</td></tr></table>
+</div>
+
+<br/>
+<b>Sensor Sampling Rate</b>
+<div id="modify_data_channel_list"></div>
+<br/>
+
+
+<button onclick='search()'>Search!</button>
+
+{% endblock %}

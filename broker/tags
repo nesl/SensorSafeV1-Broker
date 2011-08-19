@@ -1,0 +1,20 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.7	//
+SimpleTest	tests.py	/^class SimpleTest(TestCase):$/;"	c
+UserProfile	models.py	/^class UserProfile(models.Model):$/;"	c
+UserRegistrationForm	forms.py	/^class UserRegistrationForm(forms.Form):$/;"	c
+__unicode__	models.py	/^	def __unicode__(self):      $/;"	m	class:UserProfile	file:
+check_post_request_apikey	views.py	/^def check_post_request_apikey(postdata):$/;"	f
+display	views.py	/^def display(request):$/;"	f
+get_consumers	views.py	/^def get_consumers(request):$/;"	f
+get_username	views.py	/^def get_username(request):$/;"	f
+logout_view	views.py	/^def logout_view(request):$/;"	f
+profile	views.py	/^def profile(request):$/;"	f
+register	views.py	/^def register(request):$/;"	f
+register_contributor	views.py	/^def register_contributor(request):$/;"	f
+search_contributors	views.py	/^def search_contributors(request):$/;"	f
+test_basic_addition	tests.py	/^    def test_basic_addition(self):$/;"	m	class:SimpleTest

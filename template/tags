@@ -1,0 +1,57 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.7	//
+all_data_channels	search_contributors.html	/^function all_data_channels() {$/;"	f
+all_day_checkbox	search_contributors.html	/^function all_day_checkbox() {$/;"	f
+all_location_checkbox	search_contributors.html	/^function all_location_checkbox() {$/;"	f
+all_time_checkbox	search_contributors.html	/^function all_time_checkbox() {$/;"	f
+allday_checkbox	display2.html	/^function allday_checkbox()$/;"	f
+createRule	display.html	/^function createRule()$/;"	f
+createRule	display2.html	/^function createRule()$/;"	f
+create_chart	display.html	/^function create_chart(datalist)$/;"	f
+create_chart	display2.html	/^function create_chart(datalist)$/;"	f
+debug	display.html	/^function debug(msg) {$/;"	f
+debug	display2.html	/^function debug(msg) {$/;"	f
+deleteAllRules	display.html	/^function deleteAllRules()$/;"	f
+deleteAllRules	display2.html	/^function deleteAllRules()$/;"	f
+deleteRegion	display.html	/^function deleteRegion() {$/;"	f
+deleteRegion	display2.html	/^function deleteRegion() {$/;"	f
+drawRect	display.html	/^function drawRect(latLng)$/;"	f
+drawRect	display2.html	/^function drawRect(latLng)$/;"	f
+geocode_done	display2.html	/^function geocode_done() {$/;"	f
+getConditions	display.html	/^function getConditions()$/;"	f
+getConditions	display2.html	/^function getConditions()$/;"	f
+getData	display.html	/^function getData()$/;"	f
+getIndex	display.html	/^function getIndex(element, list)$/;"	f
+getIndex	display2.html	/^function getIndex(element, list)$/;"	f
+getRectBox	display.html	/^function getRectBox(rect)$/;"	f
+getRectBox	display2.html	/^function getRectBox(rect)$/;"	f
+getSummary	display.html	/^function getSummary() {$/;"	f
+getSummary	display2.html	/^function getSummary() $/;"	f
+get_checked_channels	display.html	/^function get_checked_channels()$/;"	f
+get_checked_channels	display2.html	/^function get_checked_channels()$/;"	f
+get_checked_consumers	display.html	/^function get_checked_consumers()$/;"	f
+get_contributor	display2.html	/^function get_contributor() {$/;"	f
+get_data_channels	display2.html	/^function get_data_channels()$/;"	f
+get_data_channels	search_contributors.html	/^function get_data_channels(contributor_name, contributor_address)$/;"	f
+get_distinct_location	display2.html	/^function get_distinct_location()$/;"	f
+get_first_timestamp	display2.html	/^function get_first_timestamp() $/;"	f
+get_last_timestamp	display2.html	/^function get_last_timestamp()$/;"	f
+initTimeRange	display.html	/^function initTimeRange()$/;"	f
+initTimeRange	display2.html	/^function initTimeRange()$/;"	f
+init_time_ui	search_contributors.html	/^function init_time_ui() {$/;"	f
+initialize	display.html	/^function initialize() $/;"	f
+initialize	display2.html	/^function initialize() $/;"	f
+listRules	display.html	/^function listRules()$/;"	f
+listRules	display2.html	/^function listRules()$/;"	f
+search	search_contributors.html	/^function search()$/;"	f
+set_time_range	search_contributors.html	/^function set_time_range(d1, d2) {$/;"	f
+show_data	display2.html	/^function show_data()$/;"	f
+test	display.html	/^function test()$/;"	f
+test	display2.html	/^function test()$/;"	f
+update_data_channel	search_contributors.html	/^function update_data_channel() {$/;"	f
+update_timeslider	display.html	/^function update_timeslider()$/;"	f
+update_timeslider	display2.html	/^function update_timeslider()$/;"	f

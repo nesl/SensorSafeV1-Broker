@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<b>Your Profile</b><br/>
+<br/>
+{% if profile.isConsumer %}
+You are data consumer.<br/>
+{% else %}
+You are data contributor.<br/>
+{% endif %}
+{{ user.first_name }} {{user.last_name}}<br/>
+{{ user.email }}<br/>
+Your API key (Keep this private): {{ profile.apiKey }}<br/>
+{% if profile.isConsumer %}
+<br/>
+<a href='/broker/display/'><b>Access contributor's data</b></a><br/>
+<a href='/broker/search_contributors/'><b>Search contributors</b></a>
+{% else %}
+Your data store address: {{ profile.datastoreAddress }}
+{% endif %}
+
+{% endblock %}

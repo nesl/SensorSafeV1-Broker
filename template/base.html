@@ -1,0 +1,19 @@
+<html>
+<head>
+<title>{% block title %}FieldStream{% endblock %}</title>
+{% block head %}{% endblock %}
+</head>
+
+<body>
+<h2>FieldStream SensorSafe Broker</h2>
+{% block login %}
+	{% if user.is_authenticated %}
+		<p>Welcome {{ user.username }}! <a href="/broker/profile/">My Profile</a> <a href="/broker/logout/">Sign out</a></p>
+	{% else %}
+		<p>You are currently not logged in. <a href="/broker/login/">Sign in.</a></p>
+	{% endif %}
+{% endblock %}
+
+{% block content %}{% endblock %}
+</body>
+</html>
