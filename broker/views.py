@@ -13,6 +13,8 @@ import json
 @login_required
 def profile(request):
 	request.session.set_expiry(0) # logout when browser is closed.
+
+	userinfo = None
 	try:
 		userinfo = UserProfile.objects.get(userID__exact = request.user)
 		apiKey = userinfo.apiKey

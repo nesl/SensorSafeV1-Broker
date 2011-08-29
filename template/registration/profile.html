@@ -4,13 +4,15 @@
 
 <b>Your Profile</b><br/>
 <br/>
+{{ user.first_name }} {{user.last_name}}: 
 {% if profile.isConsumer %}
-You are data consumer.<br/>
+<b>Data Consumer</b>
 {% else %}
-You are data contributor.<br/>
+<b>Data Contributor</b>
 {% endif %}
-{{ user.first_name }} {{user.last_name}}<br/>
+<br/>
 {{ user.email }}<br/>
+<br/>
 Your API key (Keep this private): {{ profile.apiKey }}<br/>
 {% if profile.isConsumer %}
 <br/>
