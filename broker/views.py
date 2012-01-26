@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import *
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.views.decorators.csrf import csrf_exempt
 import hashlib, random
 import json
 
@@ -24,13 +25,12 @@ def profile(request):
 	return render_to_response('registration/profile.html', { 'profile': userinfo }, context_instance=RequestContext(request))
 	
 
-
 def logout_view(request):
 	logout(request)
 	return HttpResponseRedirect('/broker/login/')
 
 
-
+@csrf_exempt
 def register_contributor(request):
 	if request.method != 'POST':
 		return HttpResponseBadRequest('Not POST request')
@@ -64,6 +64,7 @@ def check_post_request_apikey(postdata):
 
 
 
+@csrf_exempt
 def get_consumers(request):
 	if request.method != 'POST':
 		return HttpResponseBadRequest('Not POST request')
@@ -81,6 +82,7 @@ def get_consumers(request):
 
 
 
+@csrf_exempt
 def register(request):
 	errorMsg = []
 	if request.method == 'POST':
@@ -145,6 +147,7 @@ def display(request):
 
 
 
+@csrf_exempt
 def get_username(request):
 	if request.method != 'POST':
 		return HttpResponseBadRequest('Not POST request')
@@ -164,6 +167,7 @@ def search_contributors(request):
 
 
 
+@csrf_exempt
 def get_contributors(request):
 	if request.method != 'POST':
 		return HttpResponseBadRequest('Not POST request')

@@ -1,5 +1,7 @@
 # Django settings for sensorsafe_broker project.
 
+PROJECT_PATH = '/home/haksoo/django-projects/sensorsafe_broker'
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -10,7 +12,7 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = '/home/haksoo/django-projects/sensorsafe_broker/sqlite3.db'             # Or path to database file if using sqlite3.
+DATABASE_NAME = PROJECT_PATH + '/sqlite3.db'             # Or path to database file if using sqlite3.
 DATABASE_USER = ''             # Not used with sqlite3.
 DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
@@ -69,7 +71,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-		'/home/haksoo/django-projects/sensorsafe_broker/template'
+		PROJECT_PATH + '/template'
 )
 
 INSTALLED_APPS = (
