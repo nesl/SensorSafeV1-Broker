@@ -143,7 +143,7 @@ def register(request):
 def display(request):
 	userinfo = UserProfile.objects.get(userID__exact = request.user)
 	contributor_list = UserProfile.objects.filter(isConsumer = False);
-	return render_to_response('display2.html', { 'apikey': userinfo.apiKey, 'contributor_list': contributor_list }, context_instance=RequestContext(request))
+	return render_to_response('display.html', { 'apikey': userinfo.apiKey, 'contributor_list': contributor_list }, context_instance=RequestContext(request))
 
 
 

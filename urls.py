@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import *
+from django.conf import settings
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -16,6 +17,7 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
 
 		(r'^$', 'django.contrib.auth.views.login'),
+		(r'^files/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_DOC_ROOT}),
 		(r'login/$', 'django.contrib.auth.views.login'),
 		(r'login$', 'django.contrib.auth.views.login'),
 		(r'register/$', 'broker.views.register'),

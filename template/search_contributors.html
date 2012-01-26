@@ -19,12 +19,14 @@ div.dialog { font-size: 17px; }
 <script type="text/javascript" src="/files/js/json2-min.js"></script>
 <script type="text/javascript" src="/files/js/date-en-US.js"></script>
 <script type="text/javascript" src="/files/js/date.format.js"></script>
+<script type="text/javascript" src="/files/settings.js"></script>
+
 <script type="text/javascript">
 var contributors
 
 $(document).ready(function() 
 {
-	$.post( 'http://fieldstream.nesl.ucla.edu/broker/get_contributors',
+	$.post( BROKER_ADDRESS + '/get_contributors',
 		{ 'apikey': '{{apikey}}' },
 		function (data, textStatus, XMLHttpRequest) {
 			contributors = JSON.parse(data)

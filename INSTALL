@@ -1,6 +1,10 @@
 SensorSafe Broker Installation Guide
 
 
+TODO: 
+. Added instructions for Apache server setup.
+
+
 Dependencies
 
 1. Ubuntu (11.10 and 9.04 have been tested)
@@ -28,6 +32,8 @@ Download source code..
 # pwd
 
 Edit PROJECT_PATH in setting.py to point your project location. (output from the above 'pwd' command)
+
+Edit BROKER_ADDRESS in settings.js in template appropriately. (It should be "http://localhost:8080" for now)
 
 # python manage.py runserver 8080
 

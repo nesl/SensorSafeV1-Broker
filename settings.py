@@ -83,6 +83,8 @@ INSTALLED_APPS = (
 		'broker',
 )
 
+STATIC_DOC_ROOT = PROJECT_PATH + '/template'
+
 LOGIN_URL = '/broker/login/'
 LOGIN_REDIRECT_URL = '/broker/profile/'
 
