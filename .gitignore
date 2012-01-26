@@ -1,6 +1,10 @@
+sqlite3.db
+
 # Django project ignores
 logs
 *.pyc
+*.swp
+tags
 
 # Eclipse Android project ignores
 bin
