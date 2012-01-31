@@ -1,16 +1,11 @@
 SensorSafe Broker Installation Guide
 
 
-TODO: 
-. Added instructions for Apache server setup.
-
-
 Dependencies
 
 1. Ubuntu (11.10 and 9.04 have been tested)
 2. Python 2.x (2.6 and 2.7 have been tested)
 3. Django 1.3+ (1.3.1 has been tested)
-
 
 
 Installation Steps
@@ -35,6 +30,7 @@ Edit PROJECT_PATH in setting.py to point your project location. (output from the
 
 Edit BROKER_ADDRESS in settings.js in template appropriately. (It should be "http://localhost:8080" for now)
 
+# python manage.py syncdb
 # python manage.py runserver 8080
 
 Luanch your favorite web browser and connect to http://localhost:8080.  You should now see the SensorSafe Broker login page.
